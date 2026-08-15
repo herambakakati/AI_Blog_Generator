@@ -10,12 +10,31 @@ from langgraph.graph import StateGraph, START, END
 
 
 # ==========================================================
+# STREAMLIT PAGE CONFIGURATION
+# ==========================================================
+
+st.set_page_config(
+    page_title="AI Blog Generator",
+    page_icon="✍️",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+
+# ==========================================================
 # OPENAI API CONFIGURATION
 # ==========================================================
 
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# Streamlit Cloud / secrets.toml support
+if not OPENAI_API_KEY:
+    try:
+        OPENAI_API_KEY = st.secrets.get("OPENAI_API_KEY")
+    except Exception:
+        OPENAI_API_KEY = None
 
 
 # ==========================================================
@@ -24,83 +43,74 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 if not OPENAI_API_KEY:
 
-    st.set_page_config(
-        page_title="AI Blog Generator",
-        page_icon="✍️",
-        layout="wide",
-        initial_sidebar_state="collapsed"
-    )
+    st.html("""
+    <div style="
+        max-width:720px;
+        margin:70px auto;
+        padding:40px;
+        background:rgba(255,255,255,0.98);
+        border-radius:22px;
+        border:1px solid #e2e8f0;
+        box-shadow:0 20px 50px rgba(15,23,42,0.12);
+        text-align:center;
+        font-family:Arial,sans-serif;
+    ">
 
-    st.markdown(
-        """
         <div style="
-            max-width: 720px;
-            margin: 80px auto;
-            padding: 40px;
-            background: rgba(255,255,255,0.97);
-            border-radius: 22px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 20px 50px rgba(15,23,42,0.12);
-            text-align: center;
+            font-size:48px;
+            margin-bottom:12px;
         ">
-
-            <div style="
-                font-size: 48px;
-                margin-bottom: 12px;
-            ">
-                🔐
-            </div>
-
-            <div style="
-                font-size: 28px;
-                font-weight: 850;
-                color: #0f172a;
-                margin-bottom: 12px;
-            ">
-                AI Access Requires an API Key
-            </div>
-
-            <div style="
-                font-size: 15px;
-                line-height: 1.7;
-                color: #475569;
-                margin-bottom: 22px;
-            ">
-                Your OpenAI API key was not found.<br>
-                To continue using the AI Blog Generator,
-                please add a valid OpenAI API key with
-                available billing/credits.
-            </div>
-
-            <div style="
-                padding: 16px 20px;
-                border-radius: 14px;
-                background: #eff6ff;
-                border: 1px solid #bfdbfe;
-                color: #1e40af;
-                font-size: 14px;
-                font-weight: 650;
-                line-height: 1.6;
-            ">
-                💳 Please add billing/credits to your OpenAI
-                account if your API usage requires payment,
-                then configure your API key in the application's
-                environment variables or Streamlit secrets.
-            </div>
-
-            <div style="
-                margin-top: 22px;
-                font-size: 13px;
-                color: #64748b;
-            ">
-                Required configuration:
-                <strong>OPENAI_API_KEY</strong>
-            </div>
-
+            🔐
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+
+        <div style="
+            font-size:28px;
+            font-weight:800;
+            color:#0f172a;
+            margin-bottom:12px;
+        ">
+            AI Access Requires an API Key
+        </div>
+
+        <div style="
+            font-size:15px;
+            line-height:1.7;
+            color:#475569;
+            margin-bottom:22px;
+        ">
+            Your OpenAI API key was not found.<br>
+            To continue using the AI Blog Generator,
+            please add a valid OpenAI API key with
+            available billing/credits.
+        </div>
+
+        <div style="
+            padding:16px 20px;
+            border-radius:14px;
+            background:#eff6ff;
+            border:1px solid #bfdbfe;
+            color:#1e40af;
+            font-size:14px;
+            font-weight:600;
+            line-height:1.6;
+        ">
+            💳 Please add billing/credits to your OpenAI
+            account if your API usage requires payment,
+            then configure <strong>OPENAI_API_KEY</strong>
+            in your environment variables or Streamlit secrets.
+        </div>
+
+        <div style="
+            margin-top:22px;
+            font-size:13px;
+            color:#64748b;
+        ">
+            Required configuration:
+            <strong>OPENAI_API_KEY</strong>
+        </div>
+
+    </div>
+    """)
 
     st.stop()
 
@@ -114,6 +124,137 @@ llm = ChatOpenAI(
     temperature=0.5,
     api_key=OPENAI_API_KEY
 )
+
+
+# ==========================================================
+# SAFE LLM INVOKE
+# ==========================================================
+
+def safe_llm_invoke(prompt):
+
+    try:
+        return llm.invoke(prompt)
+
+    except Exception as e:
+
+        error_text = str(e).lower()
+
+        # API quota / billing / rate limit
+        if any(word in error_text for word in [
+            "insufficient_quota",
+            "quota",
+            "billing",
+            "payment_required",
+            "rate_limit",
+            "429"
+        ]):
+
+            st.error(
+                "💳 OpenAI API usage limit reached. "
+                "Please add billing/credits to your OpenAI account "
+                "and try again."
+            )
+            st.stop()
+
+        # Invalid API key
+        if any(word in error_text for word in [
+            "authentication",
+            "invalid_api_key",
+            "incorrect api key",
+            "401"
+        ]):
+
+            st.error(
+                "🔐 Invalid OpenAI API key. "
+                "Please configure a valid OPENAI_API_KEY "
+                "and try again."
+            )
+            st.stop()
+
+        # Other API errors
+        st.error(
+            "⚠️ The AI service could not process your request. "
+            "Please check your API configuration and try again."
+        )
+        st.stop()
+
+# ==========================================================
+# OPENAI LLM
+# ==========================================================
+
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0.5,
+    api_key=OPENAI_API_KEY
+)
+
+# ==========================================================
+# SAFE LLM INVOKE
+# ==========================================================
+
+def safe_llm_invoke(prompt):
+    try:
+        return llm.invoke(prompt)
+
+    except Exception as e:
+
+        error_text = str(e).lower()
+
+        if any(word in error_text for word in [
+            "insufficient_quota",
+            "quota",
+            "billing",
+            "payment_required",
+            "rate_limit"
+        ]):
+
+            st.error(
+                """
+                💳 **OpenAI API Usage Limit Reached**
+
+                Your API key is configured, but the available
+                API quota/credits have been exhausted or billing
+                is not currently available.
+
+                Please add billing/credits to your OpenAI API
+                account to continue using the AI Blog Generator.
+                """
+            )
+
+        elif any(word in error_text for word in [
+            "authentication",
+            "invalid_api_key",
+            "incorrect api key"
+        ]):
+
+            st.error(
+                """
+                🔐 **Invalid OpenAI API Key**
+
+                The configured API key is invalid or no longer
+                active.
+
+                Please configure a valid OpenAI API key to
+                continue using this application.
+                """
+            )
+
+        else:
+
+            st.error(
+                f"""
+                ⚠️ **AI Service Error**
+
+                The AI service could not process your request.
+
+                Please check your API configuration and try again.
+
+                Technical details:
+                `{str(e)}`
+                """
+            )
+
+        st.stop()
 
 
 # ==========================================================
@@ -142,7 +283,7 @@ Include:
 4. Conclusion
 """
 
-    outline = llm.invoke(prompt).content
+    outline = safe_llm_invoke(prompt).content
 
     return {
         "blog": outline
@@ -258,7 +399,7 @@ Never force emojis where they do not improve readability.
 Return ONLY the complete blog.
 """
 
-    blog = llm.invoke(prompt).content
+    blog = safe_llm_invoke(prompt).content
 
     return {
         "blog": blog
@@ -325,7 +466,7 @@ TOPIC-FRIENDLY EMOJI RULES:
 Return ONLY the improved blog.
 """
 
-    improved_blog = llm.invoke(prompt).content
+    improved_blog = safe_llm_invoke(prompt).content
 
     return {
         "blog": improved_blog,
@@ -351,18 +492,6 @@ workflow.add_edge("writer", END)
 
 # Compile generation graph
 app_graph = workflow.compile()
-
-
-# ==========================================================
-# 9. STREAMLIT PAGE CONFIGURATION
-# ==========================================================
-
-st.set_page_config(
-    page_title="AI Blog Generator",
-    page_icon="✍️",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
 
 
 # ==========================================================
