@@ -178,83 +178,6 @@ def safe_llm_invoke(prompt):
         )
         st.stop()
 
-# ==========================================================
-# OPENAI LLM
-# ==========================================================
-
-llm = ChatOpenAI(
-    model="gpt-4o-mini",
-    temperature=0.5,
-    api_key=OPENAI_API_KEY
-)
-
-# ==========================================================
-# SAFE LLM INVOKE
-# ==========================================================
-
-def safe_llm_invoke(prompt):
-    try:
-        return llm.invoke(prompt)
-
-    except Exception as e:
-
-        error_text = str(e).lower()
-
-        if any(word in error_text for word in [
-            "insufficient_quota",
-            "quota",
-            "billing",
-            "payment_required",
-            "rate_limit"
-        ]):
-
-            st.error(
-                """
-                💳 **OpenAI API Usage Limit Reached**
-
-                Your API key is configured, but the available
-                API quota/credits have been exhausted or billing
-                is not currently available.
-
-                Please add billing/credits to your OpenAI API
-                account to continue using the AI Blog Generator.
-                """
-            )
-
-        elif any(word in error_text for word in [
-            "authentication",
-            "invalid_api_key",
-            "incorrect api key"
-        ]):
-
-            st.error(
-                """
-                🔐 **Invalid OpenAI API Key**
-
-                The configured API key is invalid or no longer
-                active.
-
-                Please configure a valid OpenAI API key to
-                continue using this application.
-                """
-            )
-
-        else:
-
-            st.error(
-                f"""
-                ⚠️ **AI Service Error**
-
-                The AI service could not process your request.
-
-                Please check your API configuration and try again.
-
-                Technical details:
-                `{str(e)}`
-                """
-            )
-
-        st.stop()
 
 
 # ==========================================================
@@ -538,20 +461,14 @@ st.markdown(
         margin-top: 0 !important;
     }
 
-    [data-testid="stMainBlockContainer"] {
-        padding-top: 0 !important;
-    }
-
+   
     [data-testid="stHeader"] {
         height: 0 !important;
         min-height: 0 !important;
         background: transparent !important;
     }
 
-    header[data-testid="stHeader"] {
-        background: transparent;
-    }
-
+   
     /* ---------- HERO ---------- */
 
     .hero-banner {
@@ -739,18 +656,6 @@ st.markdown(
         line-height: 1.1;
     }
 
-    /* ---------- SECTION TITLES ---------- */
-
-    .section-title {
-        font-size: 25px;
-        font-weight: 850;
-        color: #0f172a;
-        margin-top: 5px;
-        margin-bottom: 10px;
-        letter-spacing: -0.5px;
-    }
-
-
     /* ==========================================================
    ULTRA PREMIUM HUMAN REVIEW
    ========================================================== */
@@ -823,49 +728,6 @@ st.markdown(
     HUMAN REVIEW BUTTONS
     ========================================================== */
 
-    /* Primary buttons — Approve & Publish */
-
-    div.stButton > button[kind="primary"] {
-        min-height: 48px !important;
-
-        border-radius: 14px !important;
-
-        color: #ffffff !important;
-
-        background:
-            linear-gradient(
-                135deg,
-                #7c3aed 0%,
-                #6366f1 48%,
-                #2563eb 100%
-            ) !important;
-
-        border: 1px solid rgba(255,255,255,0.20) !important;
-
-        font-size: 14px !important;
-        font-weight: 800 !important;
-
-        box-shadow:
-            0 10px 25px rgba(79,70,229,0.28),
-            0 3px 8px rgba(15,23,42,0.10),
-            inset 0 1px 0 rgba(255,255,255,0.22);
-
-        transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease;
-    }
-
-    div.stButton > button[kind="primary"]:hover {
-        color: #ffffff !important;
-
-        transform: translateY(-3px);
-
-        box-shadow:
-            0 16px 34px rgba(79,70,229,0.34),
-            0 5px 12px rgba(37,99,235,0.14),
-            inset 0 1px 0 rgba(255,255,255,0.25);
-    }
-
 
     /* Secondary buttons — Improve & Rewrite */
 
@@ -911,217 +773,13 @@ st.markdown(
     }
 
 
-    
-
-
-
-    /* Reduce vertical spacing between Streamlit elements */
+        /* Reduce vertical spacing between Streamlit elements */
 
     div[data-testid="stVerticalBlock"] {
         gap: 0.5rem;
     }
 
-    /* ---------- BLOG INPUT ---------- */
-
-    div[data-baseweb="input"] {
-        background: rgba(255, 255, 255, 0.96) !important;
-
-        border: 1px solid rgba(255, 255, 255, 0.90) !important;
-
-        border-radius: 18px !important;
-
-        min-height: 66px !important;
-
-        box-shadow:
-            0 12px 30px rgba(15, 23, 42, 0.08),
-            0 2px 6px rgba(15, 23, 42, 0.04),
-            inset 0 1px 0 rgba(255, 255, 255, 1);
-
-        transition:
-            border-color 0.25s ease,
-            box-shadow 0.25s ease,
-            transform 0.25s ease;
-    }
-
-
-    /* Input hover */
-
-    div[data-baseweb="input"]:hover {
-        border-color: rgba(99, 102, 241, 0.35) !important;
-
-        box-shadow:
-            0 15px 34px rgba(15, 23, 42, 0.10),
-            0 0 0 1px rgba(99, 102, 241, 0.06) !important;
-    }
-
-
-    /* Input focus */
-
-    div[data-baseweb="input"]:focus-within {
-        border-color: rgba(99, 102, 241, 0.65) !important;
-
-        box-shadow:
-            0 0 0 4px rgba(99, 102, 241, 0.10),
-            0 15px 35px rgba(15, 23, 42, 0.10) !important;
-
-        transform: translateY(-1px);
-    }
-
-
-    /* Text */
-
-    div[data-baseweb="input"] input {
-        background: transparent !important;
-
-        color: #0f172a !important;
-
-        -webkit-text-fill-color: #0f172a !important;
-
-        font-size: 17px !important;
-
-        font-weight: 600 !important;
-
-        padding: 18px 22px !important;
-
-        min-height: 66px !important;
-    }
-
-
-    /* Placeholder */
-
-    div[data-baseweb="input"] input::placeholder {
-        color: #64748b !important;
-
-        -webkit-text-fill-color: #64748b !important;
-
-        opacity: 1 !important;
-
-        font-weight: 500 !important;
-    }
-
-
-    /* ==========================================================
-    LANGUAGE SELECTOR
-    ========================================================== */
-
-    div[data-baseweb="select"] {
-        width: 100% !important;
-    }
-
-
-    /* Select box */
-
-    div[data-baseweb="select"] > div {
-        background: rgba(255, 255, 255, 0.96) !important;
-
-        border: 1px solid rgba(255, 255, 255, 0.92) !important;
-
-        border-radius: 15px !important;
-
-        min-height: 50px !important;
-
-        box-shadow:
-            0 8px 24px rgba(15, 23, 42, 0.07),
-            inset 0 1px 0 rgba(255, 255, 255, 1);
-
-        transition:
-            border-color 0.2s ease,
-            box-shadow 0.2s ease,
-            transform 0.2s ease;
-    }
-
-
-    /* Select hover */
-
-    div[data-baseweb="select"] > div:hover {
-        border-color: rgba(99, 102, 241, 0.45) !important;
-
-        box-shadow:
-            0 12px 28px rgba(79, 70, 229, 0.10) !important;
-
-        transform: translateY(-1px);
-    }
-
-
-    /* Selected language text */
-
-    div[data-baseweb="select"] span {
-        color: #0f172a !important;
-
-        font-size: 14px !important;
-
-        font-weight: 700 !important;
-    }
-
-
-    /* Dropdown arrow */
-
-    div[data-baseweb="select"] svg {
-        color: #4f46e5 !important;
-    }
-
-
-    /* ==========================================================
-    CREATE BLOG BUTTON
-    ========================================================== */
-
-    .create-blog-button {
-        margin-top: 2px;
-    }
-
-    /* ==========================================================
-    PREMIUM GENERATE BUTTON
-    ========================================================== */
-
-    div.stButton > button[kind="primary"] {
-        min-height: 48px !important;
-
-        padding: 0 22px !important;
-
-        border-radius: 14px !important;
-
-        border: 1px solid rgba(255,255,255,0.20) !important;
-
-        color: #ffffff !important;
-
-        background:
-            linear-gradient(
-                135deg,
-                #7c3aed 0%,
-                #6366f1 45%,
-                #2563eb 100%
-            ) !important;
-
-        font-size: 14px !important;
-
-        font-weight: 800 !important;
-
-        box-shadow:
-            0 10px 25px rgba(79,70,229,0.26),
-            0 3px 8px rgba(15,23,42,0.08),
-            inset 0 1px 0 rgba(255,255,255,0.22);
-
-        transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease,
-            filter 0.2s ease;
-    }
-
-
-    div.stButton > button[kind="primary"]:hover {
-        color: #ffffff !important;
-
-        transform: translateY(-2px);
-
-        filter: brightness(1.05);
-
-        box-shadow:
-            0 16px 35px rgba(79,70,229,0.32),
-            0 5px 12px rgba(37,99,235,0.12),
-            inset 0 1px 0 rgba(255,255,255,0.25);
-    }
-
-
+    
     /* ==========================================================
     BLOG DRAFT BADGE
     ========================================================== */
@@ -1215,34 +873,7 @@ st.markdown(
         color: #0f172a !important;
     }
 
-
-    /* ---------- BLOG LABEL ---------- */
-
-    .blog-label {
-        display: inline-flex;
-        align-items: center;
-
-        background: rgba(255, 255, 255, 0.72);
-
-        color: #2563eb !important;
-
-        padding: 7px 13px;
-        border-radius: 999px;
-
-        font-size: 10px;
-        font-weight: 850;
-        letter-spacing: 0.55px;
-
-        border: 1px solid rgba(255, 255, 255, 0.85);
-
-        box-shadow:
-            0 5px 16px rgba(15, 23, 42, 0.08);
-
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-    }
-
-    /* ---------- BUTTONS ---------- */
+        /* ---------- BUTTONS ---------- */
 
     div.stButton > button {
         width: 100%;
@@ -1269,47 +900,6 @@ st.markdown(
         box-shadow:
             0 12px 25px rgba(79, 70, 229, 0.14);
     }
-
-    /* Primary action */
-
-    div.stButton > button[kind="primary"] {
-        color: #ffffff !important;
-
-        background:
-            linear-gradient(
-                135deg,
-                #7c3aed 0%,
-                #4f46e5 48%,
-                #2563eb 100%
-            ) !important;
-
-        border: 1px solid rgba(255,255,255,0.18) !important;
-
-        border-radius: 14px !important;
-
-        min-height: 47px;
-
-        font-weight: 800;
-
-        box-shadow:
-            0 10px 25px rgba(79,70,229,0.25),
-            inset 0 1px 0 rgba(255,255,255,0.20);
-
-        transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease;
-    }
-
-    div.stButton > button[kind="primary"]:hover {
-        color: #ffffff !important;
-
-        transform: translateY(-2px);
-
-        box-shadow:
-            0 16px 35px rgba(79,70,229,0.32),
-            0 4px 12px rgba(37,99,235,0.12);
-    }
-
 
     /* ==========================================================
     SOCIAL SHARE CARDS
@@ -1610,134 +1200,6 @@ st.markdown(
         margin-bottom: 10px !important;
     }
 
-    /* Language label */
-    .language-label {
-        display: flex !important;
-        align-items: center !important;
-        gap: 7px !important;
-        color: #0f172a !important;
-        font-size: 13px !important;
-        font-weight: 850 !important;
-        margin: 0 0 6px 0 !important;
-        padding: 5px !important;
-    }
-
-    /* Remove unwanted empty space around selectbox */
-    div[data-testid="stSelectbox"] {
-        margin: 0 !important;
-        padding: 0 !important;
-        min-height: 0 !important;
-    }
-
-    div[data-testid="stSelectbox"] > div {
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    div[data-testid="stSelectbox"] label {
-        display: none !important;
-        height: 0 !important;
-        min-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    /* Language selector */
-    div[data-testid="stSelectbox"]
-    div[data-baseweb="select"] {
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    div[data-testid="stSelectbox"]
-    div[data-baseweb="select"] > div {
-        min-height: 50px !important;
-        height: 50px !important;
-
-        background: rgba(255,255,255,0.97) !important;
-
-        border: 1px solid rgba(255,255,255,0.95) !important;
-
-        border-radius: 15px !important;
-
-        box-shadow:
-            0 8px 24px rgba(15,23,42,0.08),
-            inset 0 1px 0 rgba(255,255,255,1) !important;
-
-        color: #0f172a !important;
-
-        margin: 0 !important;
-    }
-
-    /* Selected language */
-    div[data-testid="stSelectbox"]
-    div[data-baseweb="select"] span {
-        color: #0f172a !important;
-        -webkit-text-fill-color: #0f172a !important;
-
-        font-size: 14px !important;
-        font-weight: 700 !important;
-    }
-
-    /* Dropdown arrow */
-    div[data-testid="stSelectbox"]
-    div[data-baseweb="select"] svg {
-        color: #4f46e5 !important;
-        fill: #4f46e5 !important;
-    }
-
-    /* ==========================================================
-    BLOG TOPIC
-    ========================================================== */
-
-    div[data-testid="stTextInput"] {
-        margin: 7px 0 7px 0 !important;
-        padding: 0 !important;
-    }
-
-    div[data-testid="stTextInput"] label {
-        display: none !important;
-        height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    div[data-testid="stTextInput"]
-    div[data-baseweb="input"] {
-        min-height: 66px !important;
-
-        background: rgba(255,255,255,0.97) !important;
-
-        border: 1px solid rgba(255,255,255,0.95) !important;
-
-        border-radius: 18px !important;
-
-        box-shadow:
-            0 12px 30px rgba(15,23,42,0.08),
-            inset 0 1px 0 rgba(255,255,255,1) !important;
-
-        margin: 0 !important;
-    }
-
-    div[data-testid="stTextInput"]
-    div[data-baseweb="input"] input {
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-
-        color: #0f172a !important;
-        -webkit-text-fill-color: #0f172a !important;
-
-        font-size: 17px !important;
-        font-weight: 600 !important;
-
-        padding: 18px 22px !important;
-
-        min-height: 66px !important;
-
-        border-radius: 18px !important;
-    }
-
 
     /* ==========================================================
        GENERATE BUTTON
@@ -1795,346 +1257,275 @@ st.markdown(
         box-sizing: border-box !important;
     }
 
-    
 
-        /* ==========================================================
-           FINAL LIGHT THEME OVERRIDE
-           FORCE STREAMLIT INPUTS + SELECTBOX TO WHITE
-           ========================================================== */
+    /* ==========================================================
+    FINAL CREATE BLOG INPUTS
+    ONE SOURCE OF TRUTH
+    ========================================================== */
 
-        /* Force browser/theme rendering to light mode */
-        html,
-        body,
-        .stApp {
-            color-scheme: light !important;
-        }
-
-        /* ----------------------------------------------------------
-           BLOG TOPIC INPUT
-           ---------------------------------------------------------- */
-
-        div[data-testid="stTextInput"] {
-            background: transparent !important;
-            color-scheme: light !important;
-        }
-
-        div[data-testid="stTextInput"] div[data-baseweb="input"],
-        div[data-testid="stTextInput"] div[data-baseweb="input"] > div,
-        div[data-testid="stTextInput"] div[data-baseweb="base-input"],
-        div[data-testid="stTextInput"] input {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            color: #0f172a !important;
-            -webkit-text-fill-color: #0f172a !important;
-            color-scheme: light !important;
-        }
-
-        div[data-testid="stTextInput"] div[data-baseweb="input"] {
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 18px !important;
-            box-shadow:
-                0 12px 30px rgba(15, 23, 42, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 1) !important;
-        }
-
-        div[data-testid="stTextInput"] input {
-            font-size: 17px !important;
-            font-weight: 600 !important;
-            padding: 18px 22px !important;
-            min-height: 66px !important;
-            border-radius: 18px !important;
-            outline: none !important;
-        }
-
-        div[data-testid="stTextInput"] input::placeholder {
-            color: #64748b !important;
-            -webkit-text-fill-color: #64748b !important;
-            opacity: 1 !important;
-        }
-
-        div[data-testid="stTextInput"] div[data-baseweb="input"]:focus-within {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            border-color: #6366f1 !important;
-            box-shadow:
-                0 0 0 4px rgba(99, 102, 241, 0.10),
-                0 15px 35px rgba(15, 23, 42, 0.10) !important;
-        }
+    html,
+    body,
+    .stApp,
+    [data-testid="stAppViewContainer"] {
+        color-scheme: light !important;
+    }
 
 
-        /* ----------------------------------------------------------
-           LANGUAGE SELECTBOX
-           ---------------------------------------------------------- */
+    /* ==========================================================
+    LANGUAGE LABEL
+    ========================================================== */
 
-        div[data-testid="stSelectbox"] {
-            background: transparent !important;
-            color-scheme: light !important;
-        }
+    .language-label {
+        display: flex !important;
+        align-items: center !important;
+        gap: 7px !important;
 
-        div[data-testid="stSelectbox"] div[data-baseweb="select"],
-        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
-        div[data-testid="stSelectbox"] div[role="combobox"] {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            color: #0f172a !important;
-            color-scheme: light !important;
-        }
+        color: #0f172a !important;
+        font-size: 13px !important;
+        font-weight: 850 !important;
 
-        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
-            min-height: 50px !important;
-            height: 50px !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 15px !important;
-
-            box-shadow:
-                0 8px 24px rgba(15, 23, 42, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 1) !important;
-        }
-
-        /* Selected language */
-        div[data-testid="stSelectbox"] div[data-baseweb="select"] span,
-        div[data-testid="stSelectbox"] div[role="combobox"] span {
-            color: #0f172a !important;
-            -webkit-text-fill-color: #0f172a !important;
-            font-size: 14px !important;
-            font-weight: 700 !important;
-        }
-
-        /* Selectbox arrow */
-        div[data-testid="stSelectbox"] svg {
-            color: #4f46e5 !important;
-            fill: #4f46e5 !important;
-        }
-
-        /* Hover */
-        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            border-color: rgba(99, 102, 241, 0.45) !important;
-
-            box-shadow:
-                0 12px 28px rgba(79, 70, 229, 0.10) !important;
-        }
+        margin: 0 0 6px 0 !important;
+        padding: 5px !important;
+    }
 
 
-        /* ----------------------------------------------------------
-           DROPDOWN MENU
-           This also prevents the opened language menu from
-           becoming black.
-           ---------------------------------------------------------- */
+    /* ==========================================================
+    LANGUAGE SELECTBOX
+    ========================================================== */
 
-        div[data-baseweb="popover"],
-        div[data-baseweb="menu"],
-        div[data-baseweb="menu"] > div,
-        ul[role="listbox"] {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            color: #0f172a !important;
-            color-scheme: light !important;
-        }
+    div[data-testid="stSelectbox"] {
+        width: 100% !important;
 
-        li[role="option"],
-        li[role="option"] span {
-            background: #ffffff !important;
-            color: #0f172a !important;
-            -webkit-text-fill-color: #0f172a !important;
-        }
+        margin: 0 !important;
+        padding: 0 !important;
 
-        li[role="option"]:hover,
-        li[role="option"][aria-selected="true"] {
-            background: #eff6ff !important;
-            color: #1d4ed8 !important;
-        }
+        min-height: 0 !important;
 
+        background: transparent !important;
+        color-scheme: light !important;
+    }
 
-        /* ----------------------------------------------------------
-           REMOVE DARK BACKGROUND FROM BASEWEB INNER ELEMENTS
-           ---------------------------------------------------------- */
+    div[data-testid="stSelectbox"] > div {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
 
-        div[data-baseweb="input"] *,
-        div[data-baseweb="select"] * {
-            color-scheme: light !important;
-        }
+    div[data-testid="stSelectbox"] label {
+        display: none !important;
+    }
 
-        div[data-baseweb="input"] input {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-        }
+    div[data-testid="stSelectbox"]
+    div[data-baseweb="select"] {
+        width: 100% !important;
 
-        div[data-baseweb="select"] > div {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-        }
+        margin: 0 !important;
+        padding: 0 !important;
 
-        
-        /* ==========================================================
-           FINAL LIGHT THEME OVERRIDE
-           FORCE STREAMLIT INPUTS + SELECTBOX TO WHITE
-           ========================================================== */
+        background: transparent !important;
+        color-scheme: light !important;
+    }
 
-        /* Force browser/theme rendering to light mode */
-        html,
-        body,
-        .stApp {
-            color-scheme: light !important;
-        }
+    div[data-testid="stSelectbox"]
+    div[data-baseweb="select"] > div {
+        width: 100% !important;
 
-        /* ----------------------------------------------------------
-           BLOG TOPIC INPUT
-           ---------------------------------------------------------- */
+        height: 58px !important;
+        min-height: 58px !important;
 
-        div[data-testid="stTextInput"] {
-            background: transparent !important;
-            color-scheme: light !important;
-        }
+        box-sizing: border-box !important;
 
-        div[data-testid="stTextInput"] div[data-baseweb="input"],
-        div[data-testid="stTextInput"] div[data-baseweb="input"] > div,
-        div[data-testid="stTextInput"] div[data-baseweb="base-input"],
-        div[data-testid="stTextInput"] input {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            color: #0f172a !important;
-            -webkit-text-fill-color: #0f172a !important;
-            color-scheme: light !important;
-        }
+        background: #ffffff !important;
+        background-color: #ffffff !important;
 
-        div[data-testid="stTextInput"] div[data-baseweb="input"] {
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 18px !important;
-            box-shadow:
-                0 12px 30px rgba(15, 23, 42, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 1) !important;
-        }
+        border: 1px solid #dbe3ef !important;
+        border-radius: 16px !important;
 
-        div[data-testid="stTextInput"] input {
-            font-size: 17px !important;
-            font-weight: 600 !important;
-            padding: 18px 22px !important;
-            min-height: 66px !important;
-            border-radius: 18px !important;
-            outline: none !important;
-        }
+        box-shadow:
+            0 8px 24px rgba(15, 23, 42, 0.08),
+            inset 0 1px 0 rgba(255,255,255,1) !important;
 
-        div[data-testid="stTextInput"] input::placeholder {
-            color: #64748b !important;
-            -webkit-text-fill-color: #64748b !important;
-            opacity: 1 !important;
-        }
+        color: #0f172a !important;
+        color-scheme: light !important;
+    }
 
-        div[data-testid="stTextInput"] div[data-baseweb="input"]:focus-within {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            border-color: #6366f1 !important;
-            box-shadow:
-                0 0 0 4px rgba(99, 102, 241, 0.10),
-                0 15px 35px rgba(15, 23, 42, 0.10) !important;
-        }
+    div[data-testid="stSelectbox"]
+    div[data-baseweb="select"] span {
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+
+        font-size: 15px !important;
+        font-weight: 700 !important;
+    }
+
+    div[data-testid="stSelectbox"]
+    div[data-baseweb="select"] svg {
+        color: #4f46e5 !important;
+        fill: #4f46e5 !important;
+    }
+
+    div[data-testid="stSelectbox"]
+    div[data-baseweb="select"] > div:hover {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+
+        border-color: rgba(99,102,241,0.45) !important;
+    }
 
 
-        /* ----------------------------------------------------------
-           LANGUAGE SELECTBOX
-           ---------------------------------------------------------- */
+    /* ==========================================================
+    BLOG TOPIC INPUT
+    LARGE WHITE BOX
+    ========================================================== */
 
-        div[data-testid="stSelectbox"] {
-            background: transparent !important;
-            color-scheme: light !important;
-        }
+    div[data-testid="stTextInput"] {
+        width: 100% !important;
 
-        div[data-testid="stSelectbox"] div[data-baseweb="select"],
-        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
-        div[data-testid="stSelectbox"] div[role="combobox"] {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            color: #0f172a !important;
-            color-scheme: light !important;
-        }
+        margin: 10px 0 !important;
+        padding: 0 !important;
 
-        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
-            min-height: 50px !important;
-            height: 50px !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 15px !important;
+        background: transparent !important;
+        color-scheme: light !important;
+    }
 
-            box-shadow:
-                0 8px 24px rgba(15, 23, 42, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 1) !important;
-        }
+    div[data-testid="stTextInput"] label {
+        display: none !important;
+    }
 
-        /* Selected language */
-        div[data-testid="stSelectbox"] div[data-baseweb="select"] span,
-        div[data-testid="stSelectbox"] div[role="combobox"] span {
-            color: #0f172a !important;
-            -webkit-text-fill-color: #0f172a !important;
-            font-size: 14px !important;
-            font-weight: 700 !important;
-        }
+    div[data-testid="stTextInput"]
+    div[data-baseweb="input"] {
+        width: 100% !important;
 
-        /* Selectbox arrow */
-        div[data-testid="stSelectbox"] svg {
-            color: #4f46e5 !important;
-            fill: #4f46e5 !important;
-        }
+        height: 72px !important;
+        min-height: 72px !important;
 
-        /* Hover */
-        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            border-color: rgba(99, 102, 241, 0.45) !important;
+        box-sizing: border-box !important;
 
-            box-shadow:
-                0 12px 28px rgba(79, 70, 229, 0.10) !important;
-        }
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+
+        border: 1px solid #dbe3ef !important;
+        border-radius: 18px !important;
+
+        box-shadow:
+            0 10px 28px rgba(15,23,42,0.08),
+            inset 0 1px 0 rgba(255,255,255,1) !important;
+
+        color-scheme: light !important;
+    }
+
+    div[data-testid="stTextInput"]
+    div[data-baseweb="input"] > div {
+        height: 70px !important;
+        min-height: 70px !important;
+
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+
+        border-radius: 18px !important;
+    }
+
+    div[data-testid="stTextInput"]
+    div[data-baseweb="input"] input {
+        width: 100% !important;
+
+        height: 70px !important;
+        min-height: 70px !important;
+
+        box-sizing: border-box !important;
+
+        padding: 0 22px !important;
+
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+
+        border: none !important;
+        outline: none !important;
+
+        border-radius: 18px !important;
+
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+
+        font-size: 17px !important;
+        font-weight: 600 !important;
+
+        color-scheme: light !important;
+    }
+
+    div[data-testid="stTextInput"]
+    div[data-baseweb="input"] input::placeholder {
+        color: #64748b !important;
+        -webkit-text-fill-color: #64748b !important;
+
+        opacity: 1 !important;
+
+        font-size: 16px !important;
+        font-weight: 500 !important;
+    }
+
+    div[data-testid="stTextInput"]
+    div[data-baseweb="input"]:focus-within {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+
+        border-color: #6366f1 !important;
+
+        box-shadow:
+            0 0 0 4px rgba(99,102,241,0.10),
+            0 15px 35px rgba(15,23,42,0.10) !important;
+    }
 
 
-        /* ----------------------------------------------------------
-           DROPDOWN MENU
-           This also prevents the opened language menu from
-           becoming black.
-           ---------------------------------------------------------- */
+    /* ==========================================================
+    DROPDOWN — FORCE WHITE
+    ========================================================== */
 
-        div[data-baseweb="popover"],
-        div[data-baseweb="menu"],
-        div[data-baseweb="menu"] > div,
-        ul[role="listbox"] {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            color: #0f172a !important;
-            color-scheme: light !important;
-        }
+    div[data-baseweb="popover"],
+    div[data-baseweb="menu"],
+    div[data-baseweb="menu"] > div,
+    ul[role="listbox"] {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
 
-        li[role="option"],
-        li[role="option"] span {
-            background: #ffffff !important;
-            color: #0f172a !important;
-            -webkit-text-fill-color: #0f172a !important;
-        }
+        color: #0f172a !important;
+        color-scheme: light !important;
+    }
 
-        li[role="option"]:hover,
-        li[role="option"][aria-selected="true"] {
-            background: #eff6ff !important;
-            color: #1d4ed8 !important;
-        }
+    li[role="option"],
+    li[role="option"] span {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+    }
+
+    li[role="option"]:hover,
+    li[role="option"][aria-selected="true"] {
+        background: #eff6ff !important;
+        background-color: #eff6ff !important;
+
+        color: #1d4ed8 !important;
+    }
 
 
-        /* ----------------------------------------------------------
-           REMOVE DARK BACKGROUND FROM BASEWEB INNER ELEMENTS
-           ---------------------------------------------------------- */
+    /* ==========================================================
+    BASEWEB DARK-THEME RESET
+    ========================================================== */
 
-        div[data-baseweb="input"] *,
-        div[data-baseweb="select"] * {
-            color-scheme: light !important;
-        }
+    div[data-testid="stTextInput"]
+    div[data-baseweb="input"],
+    div[data-testid="stTextInput"]
+    div[data-baseweb="input"] > div,
+    div[data-testid="stTextInput"]
+    div[data-baseweb="input"] input,
+    div[data-testid="stSelectbox"]
+    div[data-baseweb="select"],
+    div[data-testid="stSelectbox"]
+    div[data-baseweb="select"] > div {
+        color-scheme: light !important;
+    }
 
-        div[data-baseweb="input"] input {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-        }
-
-        div[data-baseweb="select"] > div {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-        }
 
     </style>
         """),
@@ -2473,9 +1864,10 @@ if "blog" in st.session_state:
 
 
         # LinkedIn
+        # LinkedIn Share
         linkedin_url = (
-            "https://www.linkedin.com/sharing/share-offsite/"
-            "?url=https://www.linkedin.com/"
+            "https://www.linkedin.com/feed/?shareActive=true"
+            f"&text={encoded_text}"
         )
 
 
@@ -2776,7 +2168,7 @@ st.html(benefits_html)
 
 
 # ==========================================================
-# 17. FOOTER
+# 18. FOOTER
 # ==========================================================
 
 footer_html = (
