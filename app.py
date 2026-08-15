@@ -1795,6 +1795,347 @@ st.markdown(
         box-sizing: border-box !important;
     }
 
+    
+
+        /* ==========================================================
+           FINAL LIGHT THEME OVERRIDE
+           FORCE STREAMLIT INPUTS + SELECTBOX TO WHITE
+           ========================================================== */
+
+        /* Force browser/theme rendering to light mode */
+        html,
+        body,
+        .stApp {
+            color-scheme: light !important;
+        }
+
+        /* ----------------------------------------------------------
+           BLOG TOPIC INPUT
+           ---------------------------------------------------------- */
+
+        div[data-testid="stTextInput"] {
+            background: transparent !important;
+            color-scheme: light !important;
+        }
+
+        div[data-testid="stTextInput"] div[data-baseweb="input"],
+        div[data-testid="stTextInput"] div[data-baseweb="input"] > div,
+        div[data-testid="stTextInput"] div[data-baseweb="base-input"],
+        div[data-testid="stTextInput"] input {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+            color-scheme: light !important;
+        }
+
+        div[data-testid="stTextInput"] div[data-baseweb="input"] {
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 18px !important;
+            box-shadow:
+                0 12px 30px rgba(15, 23, 42, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+        }
+
+        div[data-testid="stTextInput"] input {
+            font-size: 17px !important;
+            font-weight: 600 !important;
+            padding: 18px 22px !important;
+            min-height: 66px !important;
+            border-radius: 18px !important;
+            outline: none !important;
+        }
+
+        div[data-testid="stTextInput"] input::placeholder {
+            color: #64748b !important;
+            -webkit-text-fill-color: #64748b !important;
+            opacity: 1 !important;
+        }
+
+        div[data-testid="stTextInput"] div[data-baseweb="input"]:focus-within {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            border-color: #6366f1 !important;
+            box-shadow:
+                0 0 0 4px rgba(99, 102, 241, 0.10),
+                0 15px 35px rgba(15, 23, 42, 0.10) !important;
+        }
+
+
+        /* ----------------------------------------------------------
+           LANGUAGE SELECTBOX
+           ---------------------------------------------------------- */
+
+        div[data-testid="stSelectbox"] {
+            background: transparent !important;
+            color-scheme: light !important;
+        }
+
+        div[data-testid="stSelectbox"] div[data-baseweb="select"],
+        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
+        div[data-testid="stSelectbox"] div[role="combobox"] {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            color-scheme: light !important;
+        }
+
+        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+            min-height: 50px !important;
+            height: 50px !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 15px !important;
+
+            box-shadow:
+                0 8px 24px rgba(15, 23, 42, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+        }
+
+        /* Selected language */
+        div[data-testid="stSelectbox"] div[data-baseweb="select"] span,
+        div[data-testid="stSelectbox"] div[role="combobox"] span {
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+            font-size: 14px !important;
+            font-weight: 700 !important;
+        }
+
+        /* Selectbox arrow */
+        div[data-testid="stSelectbox"] svg {
+            color: #4f46e5 !important;
+            fill: #4f46e5 !important;
+        }
+
+        /* Hover */
+        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            border-color: rgba(99, 102, 241, 0.45) !important;
+
+            box-shadow:
+                0 12px 28px rgba(79, 70, 229, 0.10) !important;
+        }
+
+
+        /* ----------------------------------------------------------
+           DROPDOWN MENU
+           This also prevents the opened language menu from
+           becoming black.
+           ---------------------------------------------------------- */
+
+        div[data-baseweb="popover"],
+        div[data-baseweb="menu"],
+        div[data-baseweb="menu"] > div,
+        ul[role="listbox"] {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            color-scheme: light !important;
+        }
+
+        li[role="option"],
+        li[role="option"] span {
+            background: #ffffff !important;
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+        }
+
+        li[role="option"]:hover,
+        li[role="option"][aria-selected="true"] {
+            background: #eff6ff !important;
+            color: #1d4ed8 !important;
+        }
+
+
+        /* ----------------------------------------------------------
+           REMOVE DARK BACKGROUND FROM BASEWEB INNER ELEMENTS
+           ---------------------------------------------------------- */
+
+        div[data-baseweb="input"] *,
+        div[data-baseweb="select"] * {
+            color-scheme: light !important;
+        }
+
+        div[data-baseweb="input"] input {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+        }
+
+        div[data-baseweb="select"] > div {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+        }
+
+        
+        /* ==========================================================
+           FINAL LIGHT THEME OVERRIDE
+           FORCE STREAMLIT INPUTS + SELECTBOX TO WHITE
+           ========================================================== */
+
+        /* Force browser/theme rendering to light mode */
+        html,
+        body,
+        .stApp {
+            color-scheme: light !important;
+        }
+
+        /* ----------------------------------------------------------
+           BLOG TOPIC INPUT
+           ---------------------------------------------------------- */
+
+        div[data-testid="stTextInput"] {
+            background: transparent !important;
+            color-scheme: light !important;
+        }
+
+        div[data-testid="stTextInput"] div[data-baseweb="input"],
+        div[data-testid="stTextInput"] div[data-baseweb="input"] > div,
+        div[data-testid="stTextInput"] div[data-baseweb="base-input"],
+        div[data-testid="stTextInput"] input {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+            color-scheme: light !important;
+        }
+
+        div[data-testid="stTextInput"] div[data-baseweb="input"] {
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 18px !important;
+            box-shadow:
+                0 12px 30px rgba(15, 23, 42, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+        }
+
+        div[data-testid="stTextInput"] input {
+            font-size: 17px !important;
+            font-weight: 600 !important;
+            padding: 18px 22px !important;
+            min-height: 66px !important;
+            border-radius: 18px !important;
+            outline: none !important;
+        }
+
+        div[data-testid="stTextInput"] input::placeholder {
+            color: #64748b !important;
+            -webkit-text-fill-color: #64748b !important;
+            opacity: 1 !important;
+        }
+
+        div[data-testid="stTextInput"] div[data-baseweb="input"]:focus-within {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            border-color: #6366f1 !important;
+            box-shadow:
+                0 0 0 4px rgba(99, 102, 241, 0.10),
+                0 15px 35px rgba(15, 23, 42, 0.10) !important;
+        }
+
+
+        /* ----------------------------------------------------------
+           LANGUAGE SELECTBOX
+           ---------------------------------------------------------- */
+
+        div[data-testid="stSelectbox"] {
+            background: transparent !important;
+            color-scheme: light !important;
+        }
+
+        div[data-testid="stSelectbox"] div[data-baseweb="select"],
+        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
+        div[data-testid="stSelectbox"] div[role="combobox"] {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            color-scheme: light !important;
+        }
+
+        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+            min-height: 50px !important;
+            height: 50px !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 15px !important;
+
+            box-shadow:
+                0 8px 24px rgba(15, 23, 42, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+        }
+
+        /* Selected language */
+        div[data-testid="stSelectbox"] div[data-baseweb="select"] span,
+        div[data-testid="stSelectbox"] div[role="combobox"] span {
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+            font-size: 14px !important;
+            font-weight: 700 !important;
+        }
+
+        /* Selectbox arrow */
+        div[data-testid="stSelectbox"] svg {
+            color: #4f46e5 !important;
+            fill: #4f46e5 !important;
+        }
+
+        /* Hover */
+        div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            border-color: rgba(99, 102, 241, 0.45) !important;
+
+            box-shadow:
+                0 12px 28px rgba(79, 70, 229, 0.10) !important;
+        }
+
+
+        /* ----------------------------------------------------------
+           DROPDOWN MENU
+           This also prevents the opened language menu from
+           becoming black.
+           ---------------------------------------------------------- */
+
+        div[data-baseweb="popover"],
+        div[data-baseweb="menu"],
+        div[data-baseweb="menu"] > div,
+        ul[role="listbox"] {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            color-scheme: light !important;
+        }
+
+        li[role="option"],
+        li[role="option"] span {
+            background: #ffffff !important;
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+        }
+
+        li[role="option"]:hover,
+        li[role="option"][aria-selected="true"] {
+            background: #eff6ff !important;
+            color: #1d4ed8 !important;
+        }
+
+
+        /* ----------------------------------------------------------
+           REMOVE DARK BACKGROUND FROM BASEWEB INNER ELEMENTS
+           ---------------------------------------------------------- */
+
+        div[data-baseweb="input"] *,
+        div[data-baseweb="select"] * {
+            color-scheme: light !important;
+        }
+
+        div[data-baseweb="input"] input {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+        }
+
+        div[data-baseweb="select"] > div {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+        }
+
     </style>
         """),
         unsafe_allow_html=True
@@ -2441,7 +2782,7 @@ st.html(benefits_html)
 footer_html = (
     '<div class="footer">'
     '<div>Developed by <span class="developer">Heramba Kakati</span></div>'
-    '<div style="margin-top:2px;">AI Blog Generator • Create, review, refine, and share</div>'
+    '<div style="margin-top:0px;">AI Blog Generator • Create, review, refine, and share</div>'
     '</div>'
 )
 
